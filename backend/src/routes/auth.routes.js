@@ -6,9 +6,15 @@ const router = express.Router();
 
 router.post('/signup',signup)
 router.post('/login',login)
-router.delete('/logout',logout)
+router.post('/logout',logout)
 
 router.post('/onboarding',protectRoute,onboard)
+
+
+// checks user logged in or not
+router.get('/me',protectRoute,(req,res)=>{
+    res.status(200).json({success:true,user:req.user})
+})
 
 
 export default router;

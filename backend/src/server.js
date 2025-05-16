@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 5001
 
 
 import authRoutes from './routes/auth.routes.js'
-
+import userRoutes from './routes/user.routes.js'
 
 
 app.use(express.json());
@@ -23,7 +23,7 @@ app.use(cookieParser())
 
 
 app.use("/api/v1/auth",authRoutes);
-
+app.use("/api/v1/user",userRoutes);
 
 app.listen(PORT,(req,res)=>{
    console.log(`server listning at ${PORT}`)
