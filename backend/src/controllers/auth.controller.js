@@ -1,5 +1,8 @@
+import bcrypt from 'bcryptjs';
 import User from '../models/user.model.js'
 import jwt from 'jsonwebtoken'
+
+
 
 export const signup = async(req,res)=>{
     try {
@@ -9,7 +12,7 @@ export const signup = async(req,res)=>{
             return res.status(400).json({message:"all fields are required"})
         }
 
-        if(!password.length<6){
+        if(password.length<6){
             return res.status(400).json({message:"Password must be atleast 6 characters"})
         }
 
@@ -29,7 +32,7 @@ if (!emailRegex.test(email)) {
         const idx = Math.floor(Math.random()*100)+1 // no bw 1-100
         const randomAvatar = `https://avatar.iran.liara.run/public/${idx}.png`
 
-        const newUser = new User.create({
+        const newUser = await User.create({
             email,
             fullName,
             password,
@@ -65,8 +68,47 @@ res.status(201).json({success:true,user:newUser});
 
 export const login = async(req,res)=>{
     try {
-        
+        const {email,password} = req.body
+        if(!email || !password){
+            return res.status(400).json({message:"All fields are required"})
+        }
+
+        const user = await User.findOne({email});
+        if(!user){
+            return res.status(404).json({message:"Invalid credentials"})
+        }
+
+        const isPasswordCorrect = await user.matchPassword(password)
+        if(!isPasswordCorrect){
+             return res.status(401).json({message:"Invalid credentials"})
+        }
+
+        const token =  jwt.sign(
+            { userId :user._id },
+               process.env.JWT_SECRET,
+             {expiresIn:"7d"}
+        )
+
+        res.cookie("jwt",token,
+            {
+                maxAge:7*24*60*60*1000,
+                httpOny:true,
+                sameSite:"strict",
+                secure:process.env.NODE_ENV==="production",
+            })
+
+         res.status(201).json({
+             success:true,
+            message:"user logged in successfully",
+            user:user
+        })
+
+ 
+
+
     } catch (error) {
+        console.log("error in login controller",error);
+        return res.status(500).json({message:"error loggingin user"})
         
     }
     
@@ -76,7 +118,12 @@ export const login = async(req,res)=>{
 export const logout = async(req,res)=>{
     try {
         
+        res.clearCookie("jwt");
+
+        return res.status(201).json({message:"user logged out successfully"})
     } catch (error) {
+        console.log("error in logout controller",error);
+        return res.status(500).json({message:"error logging out user"})
         
     }
     

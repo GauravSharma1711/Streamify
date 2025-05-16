@@ -27,11 +27,11 @@ const userSchema = new mongoose.Schema({
      },
        nativeLanguage:{
         type:String,
-        required:true,
+        
     },
       learningLanguage:{
         type:String,
-        required:true,
+       
     },
     location:{
       type:String,
@@ -53,7 +53,7 @@ const userSchema = new mongoose.Schema({
 },{timestamps:true})
 
 
-const User = mongoose.model("User",userSchema);
+
 
 //pre hook
 userSchema.pre("save",async function(next){
@@ -68,5 +68,13 @@ userSchema.pre("save",async function(next){
     
    }
 })
+
+userSchema.methods.matchPassword = async function(password){
+    const match =  await bcrypt.compare(password , this.password);
+    return match;
+}
+
+
+const User = mongoose.model("User",userSchema);
 
 export default User
