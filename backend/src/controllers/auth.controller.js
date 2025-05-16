@@ -1,6 +1,7 @@
-import bcrypt from 'bcryptjs';
+
 import User from '../models/user.model.js'
 import jwt from 'jsonwebtoken'
+import { upsertStreamUser } from '../lib/stream.js';
 
 
 
@@ -39,7 +40,20 @@ if (!emailRegex.test(email)) {
             profilePic:randomAvatar,
         })
 
-// create user in stream as well
+// save user in stream as well
+
+try {
+    await upsertStreamUser({
+    id:newUser._id.toString(),
+    name:newUser.fullName,
+    image:newUser.profilePic || ""
+});
+console.log(`stream user created for ${newUser.fullName}`);
+} catch (error) {
+    console.log("Error creating stream user",error);
+}
+
+
 
 const token = jwt.sign(
     { userId:newUser._id, },
@@ -127,4 +141,49 @@ export const logout = async(req,res)=>{
         
     }
     
+}
+
+export const onboard = async(req,res)=>{
+    try {
+        const userId = req.user._id;
+
+        const{fullName,bio,nativeLanguage,learningLanguage,location}=req.body
+
+        if(!fullName || !bio || !nativeLanguage || !learningLanguage || !location){
+            return res.status(401).json({message:"All fields are required"})
+        }
+
+
+        const updatedUser = await User.findOneAndUpdate(userId,{
+         ...req.body,
+         isOnboarded:true
+        },{new:true})
+
+
+        if(!updatedUser){
+            return res.status(404).json({message:"User not found"});
+        }
+
+        // UPDATE THE USER INFO IN STREAM
+        try {
+            await upsertStreamUser({
+                id:updatedUser._id.toString(),
+               name:updatedUser.fullName,
+               image:updatedUser.profilePic || "",
+            })
+
+    console.log(`stream user updated after onboarding for ${updatedUser.fullName}`);
+            
+        } catch (error) {
+        console.log("Error creating stream user",error);
+        }
+
+        res.status(200).json({success:true,user:updatedUser})
+
+
+    } catch (error) {
+        console.error("Error in onboarding controller",error);
+     res.status(500).json({message:"Internal server error"})
+        
+    }
 }
