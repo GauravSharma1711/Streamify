@@ -9,8 +9,10 @@ const router = express.Router()
 
 router.get('/',protectRoute,getRecomendedUsers);
 router.get('/friends',protectRoute,getMyFriends);
-router.get('/send',protectRoute,sendFriendRequest);
-router.get('/accept',protectRoute,acceptFriendRequest);
+
+router.post('/friend-request/:id',protectRoute,sendFriendRequest);
+
+router.put('/friend-request/:id/accept',protectRoute,acceptFriendRequest);
 router.get('/get',protectRoute,getFriendRequest);
 router.get('/ongoing',protectRoute,getOngoingFriendRequest);
 
