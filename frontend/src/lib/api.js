@@ -16,3 +16,8 @@ export const signup = async(signupData)=>{
         const res = await axiosInstance.post('/auth/onboarding',userData);
         return res.data;
       }
+
+      export const login = async(userData)=>{
+        const res = await axiosInstance.post('/auth/login',userData);
+        return res.data
+      }

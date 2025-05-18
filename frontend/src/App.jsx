@@ -47,7 +47,12 @@ if(isLoading) return <PageLoader/>
 
 
 
-<Route path='/login' element={!isAuthenticated?<LoginPage/>:<Navigate to={'/'}/>}/>
+<Route path='/login' element= {
+  !isAuthenticated  ? <LoginPage/> :
+   <Navigate to={ isOnboarded ? "/" : "/onboarding" } /> }/>
+
+
+
 <Route path='/notification' element={<NotificationsPage/>}/>
 <Route path='/call' element={!isAuthenticated?<CallPage/>:<Navigate to={'/'}/>}/>
 <Route path='/chat' element={!isAuthenticated?<ChatPage/>:<Navigate to={'/'}/>}/>
