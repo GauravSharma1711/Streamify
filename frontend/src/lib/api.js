@@ -10,3 +10,9 @@ export const signup = async(signupData)=>{
        
         return res.data
       }
+
+
+      export const completeOnboarding = async(userData)=>{
+        const res = await axiosInstance.post('/auth/onboarding',userData);
+        return res.data;
+      }

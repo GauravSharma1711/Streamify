@@ -1,4 +1,4 @@
-import { getAuthUser } from './lib/api.js'
+import { getAuthUser } from '../lib/api.js'
 import { useQuery } from '@tanstack/react-query'
 
 const useAuthUser = () => {

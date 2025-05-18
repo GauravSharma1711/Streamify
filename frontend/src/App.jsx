@@ -39,14 +39,30 @@ if(isLoading) return <PageLoader/>
 <Route path='/' element={
   isAuthenticated && isOnboarded
 ?
-<HomePage/>:<Navigate to={'/login'}/>}/>
-<Route path='/signup' element={!isAuthenticated?<SignUpPage/>:<Navigate to={'/'}/>}/>
+(<HomePage/>):( <Navigate to={'/login'}/> ) }/>
+
+<Route path='/signup' element={
+  !isAuthenticated ?  <SignUpPage/> :
+   <Navigate to={ isOnboarded ? '/':<OnboardingPage/>}/>}/>
+
+
+
 <Route path='/login' element={!isAuthenticated?<LoginPage/>:<Navigate to={'/'}/>}/>
 <Route path='/notification' element={<NotificationsPage/>}/>
 <Route path='/call' element={!isAuthenticated?<CallPage/>:<Navigate to={'/'}/>}/>
 <Route path='/chat' element={!isAuthenticated?<ChatPage/>:<Navigate to={'/'}/>}/>
 
-<Route path='/onboarding' element={!isAuthenticated?<OnboardingPage/>:<Navigate to={'/'}/>}/>
+<Route path='/onboarding' element={
+  isAuthenticated ?
+  (
+    !isOnboarded?
+    (<OnboardingPage/>) : (<Navigate to={'/'}/>)
+    
+  )   :
+
+  (  <Navigate to={'/'}/>   )
+  
+  }/>
 
    </Routes>
          <Toaster/>
