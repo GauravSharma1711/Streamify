@@ -55,7 +55,7 @@ export const signup = async(signupData)=>{
 
 
         export const getFriendRequest = async()=>{
-        const res = await axiosInstance.get('/user/friend-request')
+        const res = await axiosInstance.get('/user/friend-requests')
         return res.data
       }
 
@@ -63,4 +63,9 @@ export const signup = async(signupData)=>{
  export const acceptFriendRequest = async(id)=>{
         const res = await axiosInstance.put(`/user/friend-request/${id}/accept`)
         return res.data
+      }
+
+      export const getStreamToken = async()=>{
+        const res = await axiosInstance.get('/chat/token');
+        return res
       }

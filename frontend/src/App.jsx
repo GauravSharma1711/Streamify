@@ -57,7 +57,7 @@ if(isLoading) return <PageLoader/>
 
 <Route path='/signup' element={
   !isAuthenticated ?  <SignUpPage/> :
-   <Navigate to={ isOnboarded ? '/':<OnboardingPage/>}/>}/>
+   <Navigate to={ isOnboarded ? '/':'/onboarding'}/>}/>
 
 
 
@@ -84,7 +84,18 @@ element={
 
 
 <Route path='/call' element={!isAuthenticated?<CallPage/>:<Navigate to={'/'}/>}/>
-<Route path='/chat' element={!isAuthenticated?<ChatPage/>:<Navigate to={'/'}/>}/>
+
+
+
+<Route path='/chat/:id' element={
+  isAuthenticated && isOnboarded ? (
+    <Layout showSidebar={false}>
+      <ChatPage/>
+    </Layout>
+  ) :(
+    <Navigate to={!isAuthenticated ? "/login" : "/onboarding"}/>
+  )  
+ } />
 
 <Route path='/onboarding' element={
   isAuthenticated ?

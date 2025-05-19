@@ -14,7 +14,7 @@ const SignUpPage = () => {
 
 
 
- const {signupMutation,error,isPending} = useSignup
+ const {signupMutation,error,isPending} = useSignup();
 
   const handleSignup = (e)=>{
     e.preventDefault();
