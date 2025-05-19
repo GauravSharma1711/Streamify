@@ -52,3 +52,15 @@ export const signup = async(signupData)=>{
         const res = await axiosInstance.post(`/user/friend-request/${id}`)
         return res.data
       }
+
+
+        export const getFriendRequest = async()=>{
+        const res = await axiosInstance.get('/user/friend-request')
+        return res.data
+      }
+
+
+ export const acceptFriendRequest = async(id)=>{
+        const res = await axiosInstance.put(`/user/friend-request/${id}/accept`)
+        return res.data
+      }
