@@ -9,6 +9,8 @@ import ChatPage from './pages/ChatPage'
 import NotificationsPage from './pages/NotificationsPage'
 import OnboardingPage from './pages/OnboardingPage'
 
+import Layout from './components/Layout.jsx'
+
 import  {Toaster}  from 'react-hot-toast'
 
 
@@ -39,7 +41,19 @@ if(isLoading) return <PageLoader/>
 <Route path='/' element={
   isAuthenticated && isOnboarded
 ?
-(<HomePage/>):( <Navigate to={'/login'}/> ) }/>
+(
+  <Layout showSidebar={true}>
+     <HomePage/>
+   </Layout>
+)   : (  
+
+  <Navigate to={'/login'}/> 
+
+) }/>
+
+
+
+
 
 <Route path='/signup' element={
   !isAuthenticated ?  <SignUpPage/> :
