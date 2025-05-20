@@ -83,7 +83,15 @@ element={
 
 
 
-<Route path='/call' element={!isAuthenticated?<CallPage/>:<Navigate to={'/'}/>}/>
+<Route path='/call/:id' element={
+
+      isAuthenticated && isOnboarded ?(
+        <CallPage/>
+      ):(
+        <Navigate to={!isAuthenticated ? "/login" : "/onboarding"}/>
+      )
+   }
+ />
 
 
 
